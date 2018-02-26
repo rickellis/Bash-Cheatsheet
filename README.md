@@ -19,9 +19,9 @@ To remove the trailing slash from a directory:
 
 Does a directory exist?
 
-if [ -d $DIR ]; then
-    echo "Directory exists!"
-fi
+    if [ -d $DIR ]; then
+        echo "Directory exists!"
+    fi
 
 
 Extract the filename from the path
