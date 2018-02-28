@@ -49,6 +49,12 @@ For other app types use command with the -v flag to prevent the application from
 
 ## Arrays
 
+To read the each line of a file into an array:
+
+    # -t means remove trailing newlines
+
+    readarray -t MYARRAY < /path/to/filename
+
 Read a directory and put all filenames with a particular extension into an array:
 
     i=0
@@ -123,6 +129,20 @@ To find a value in a string:
     if echo "$MYSTRING" | egrep -q "(^|\s)${SEARCHFOR}($|\s)"; then
         echo "$SEARCHFOR exists!"
     fi
+
+Delete everything until the first slash
+
+    MYVAR="this is some text /path/to/foo.jpg"
+    
+    MYVAR=$(echo $MYVAR | sed 's/^[^/]*\///g')
+
+Delete everything after a colon:
+
+    MYVAR="foo:bar"
+
+    MYVAR=$(echo $MYVAR | sed "s/[:].*//")
+
+
 
 
 ## Math
