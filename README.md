@@ -2,6 +2,27 @@
 A collection of useful code for Bash.
 
 
+# Variables
+
+Declare a variable and set its value, but only if the variable
+is empty or undefined. It uses indirect parameter expansion. The ! means set the variable name, not just the value.
+
+    # Required arguments:
+    #   1. Variable name
+    #   2. Variable value
+    #
+    # Usage:
+    #
+    #   setvar foo bar
+    #
+    # In the above example, if a variable named foo
+    # exists and is not empty it will be set to bar.
+    # Otherwise its value will not be altered.
+    setvar() {
+        eval "${1}=\"${!1:-${2}}\"";
+    }
+
+
 ## Paths
 
 When a script gets invoked via an alias $PWD returns the directory where the alias resides, not the script being called. To find the full canonical path to the current script use:
