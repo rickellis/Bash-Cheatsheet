@@ -65,7 +65,7 @@ For other app types use command with the -v flag to prevent the application from
 
 ## Arrays
 
-#### To read the each line of a file into an array:
+#### Read the each line of a file into an array:
 
     # -t means remove trailing newlines
 
@@ -76,28 +76,39 @@ For other app types use command with the -v flag to prevent the application from
     i=0
     declare -A MY_ARRAY
     for file in /path/to/*.txt; do
-        if [ -f "$file" ]; then
+        if [[ -f "$file" ]]; then
             MY_ARRAY[${i}]="$file"
             ((i++))
         fi
     done
 
+#### Loop through an array in reverse order
+
+    MYARRAY=('one' 'two' 'three' 'four' 'five' 'six')
+
+    for (( i=${#MYARRAY[@]}-1 ; i>=0 ; i-- )) ; do
+        echo "${MYARRAY[i]}"
+    done
+
+
 #### Count how many items are in an array:
 
-    count="${#MY_ARRAY[@]}"
+    MYARRAY=(1, 2, 3, 4, 5, 6)
+
+    count="${#MYARRAY[@]}"
 
     echo "$count"
 
-#### If no items are in an array issue warming
+#### Validate an array
 
-    if [ ${#MY_ARRAY[@]} -eq 0 ]; then
+    if [[ ${#MY_ARRAY[@]} -eq 0 ]]; then
         echo "Array empty"
     fi
 
 
 ## Loops
 
-Iterate through all files in a directory that have a certain extension
+#### Iterate through all files in a directory that have a certain extension
 
     for filepath in /path/to/*.png
         do
@@ -105,11 +116,63 @@ Iterate through all files in a directory that have a certain extension
     done
 
 
+#### Modulus to alternate in a loop
+
+    for ((i=1; i<=10; i++))
+    {
+        if (( $i%2 == 0 )); then
+            echo "Even"
+        else
+            echo "Odd"
+        fi
+    }
+
 ## Regular Expressions
 
 #### Remove newlines:
 
     MYVAR=${MYVAR//$'\n'/}
+
+
+#### Remove spaces
+
+Using sed
+
+    str="Hello, my name is Foo"
+
+    str=$(echo $str | sed "s/[ ]//g")
+
+    echo $str # Hello,mynameisFoo
+
+Using parameter expansion
+
+    str="Hello, my name is Foo"
+
+    str=${str// /}
+
+    echo $str # Hello,mynameisFoo
+
+
+#### Parameter expansion
+
+    str="John, at the Bar is a friend-of-mine"
+
+    str=${str,,}    # lowercase
+    str=${str//,/}  # remove commas
+    str=${str//-/}  # remove dashes
+    str=${str// /}  # remove spaces
+
+    echo $str # johnatthebarisafriendofmine
+
+
+#### Remove everything after a certain character
+
+    str="Nancy Davis # Will bring jello to the potluck"
+
+    str=$(echo $str | sed "s/#.*//")
+
+    echo $str # Nancy Davis
+
 
 #### Change case
 
@@ -117,9 +180,12 @@ Iterate through all files in a directory that have a certain extension
     MYVAR=${MYVAR^^} # Uppercase all characters
 
 
-#### Truncate a string to 7 characters
+#### Truncate a string to x characters
 
-    $MYSTRING="${MYSTRING:0:7}"
+    MYSTRING="foobarbaz"
+
+    $MYSTRING="${MYSTRING:0:3}" # returns "foo"
+    $MYSTRING="${MYSTRING:6:3}" # returns "baz"
 
 
 #### Does the variable contian only integers?
@@ -224,3 +290,13 @@ To look up all process IDs associated with a package and kill them:
 #### Change the input field separator from a space to a null
 
     IFS=$'\n'
+
+#### Get the returned value of the last command
+
+    ls >/dev/null 2>&1
+
+    echo $?  # Returns 0
+
+    fofofofo >/dev/null 2>&1
+
+    echo $?  # Returns 127 (command not found)
