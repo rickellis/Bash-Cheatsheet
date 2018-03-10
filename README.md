@@ -143,15 +143,6 @@ Using sed
 
     echo $str # Hello,mynameisFoo
 
-Using parameter expansion
-
-    str="Hello, my name is Foo"
-
-    str=${str// /}
-
-    echo $str # Hello,mynameisFoo
-
-
 #### Parameter expansion
 
     str="John, at the Bar is a friend-of-mine"
