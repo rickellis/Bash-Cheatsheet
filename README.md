@@ -110,8 +110,7 @@ For other app types use command with the -v flag to prevent the application from
 
 #### Iterate through all files in a directory that have a certain extension
 
-    for filepath in /path/to/*.png
-        do
+    for filepath in /path/to/*.png; do
         echo "$filepath"
     done
 
