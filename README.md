@@ -25,37 +25,32 @@ is empty or undefined. It uses indirect parameter expansion. The ! means set the
 
 ## Paths
 
+#### Find the full path of a script
 When a script gets invoked via an alias $PWD returns the directory where the alias resides, not the script being called. To find the full canonical path to the current script use:
 
-    BASEPATH=$(dirname -- $(readlink -fn -- "$0"))
+    BASEPATH=$(dirname $0)
 
     echo "$BASEPATH"
 
 
-To remove the trailing slash from a directory:
+#### To remove the trailing slash from a directory:
 
     if [[ $DIR =~ .*/$ ]]; then
         DIR="${DIR:0:-1}"
     fi
 
-Does a directory exist?
-
-    if [ -d $DIR ]; then
-        echo "Directory exists!"
-    fi
-
-
-Extract the filename from the path
+#### Extract the filename from the path
 
     filename="${filepath##*/}"
 
-Remove the file extension, leaving only the name:
+#### Remove the file extension, leaving only the name:
+    
     name="${filename%%.*}"
 
 
 # Determine if a package is installed
 
-Is a package installed? This looks for the existence of its shell command:
+This looks for the existence of its shell command:
 
     if [[ $(type curl) ]]; then
         echo " Curl installed!"
@@ -70,13 +65,13 @@ For other app types use command with the -v flag to prevent the application from
 
 ## Arrays
 
-To read the each line of a file into an array:
+#### To read the each line of a file into an array:
 
     # -t means remove trailing newlines
 
     readarray -t MYARRAY < /path/to/filename
 
-Read a directory and put all filenames with a particular extension into an array:
+#### Read a directory and put all filenames with a particular extension into an array:
 
     i=0
     declare -A MY_ARRAY
@@ -87,13 +82,13 @@ Read a directory and put all filenames with a particular extension into an array
         fi
     done
 
-Count how many items are in an array:
+#### Count how many items are in an array:
 
     count="${#MY_ARRAY[@]}"
 
     echo "$count"
 
-If no items are in an array issue warming
+#### If no items are in an array issue warming
 
     if [ ${#MY_ARRAY[@]} -eq 0 ]; then
         echo "Array empty"
@@ -112,38 +107,37 @@ Iterate through all files in a directory that have a certain extension
 
 ## Regular Expressions
 
-Remove newlines:
+#### Remove newlines:
 
     MYVAR=${MYVAR//$'\n'/}
 
-Change case
+#### Change case
 
     MYVAR=${MYVAR,,} # Lowercase all characters
     MYVAR=${MYVAR^^} # Uppercase all characters
 
 
-Truncate a string to 7 characters
+#### Truncate a string to 7 characters
 
     $MYSTRING="${MYSTRING:0:7}"
 
 
-Does the variable contian only integers?
+#### Does the variable contian only integers?
 
     if [[ $MYVAR =~ ^?[0-9]+$ ]]; then
         echo "Only integers allowed!"
     fi
 
-
-Extract the hex color value from a string:
+#### Extract the hex color value from a string:
 
     MYSTRING=$(echo "$MYSTRING" | sed 's/.*[[:space:]]\(#[a-zA-Z0-9]\+\)[[:space:]].*/\1/')
 
-Escape certain characters:
+#### Escape certain characters:
 
     MYVAR=${MYVAR//&/\\&} # Excape ampersands
 
 
-To find a value in a string:
+#### To find a value in a string:
 
     SEARCHFOR="bar"
 
@@ -151,13 +145,13 @@ To find a value in a string:
         echo "$SEARCHFOR exists!"
     fi
 
-Delete everything until the first slash
+#### Delete everything until the first slash
 
     MYVAR="this is some text /path/to/foo.jpg"
     
     MYVAR=$(echo $MYVAR | sed 's/^[^/]*\///g')
 
-Delete everything after a colon:
+#### Delete everything after a colon:
 
     MYVAR="foo:bar"
 
@@ -168,17 +162,16 @@ Delete everything after a colon:
 
 ## Math
 
-To perform arithmatic use:
+#### To perform arithmatic use:
 
     echo $(( 5+2 ))
 
-To assign the result to a variable
+#### To assign the result to a variable
 
     n=5
     n=$(( n-1 ))
 
-
-Generate a random number between two values:
+#### Generate a random number between two values:
 
     RND=$(shuf -i 1-20 -n 1)
     echo "$RND"
@@ -207,7 +200,7 @@ To look up all process IDs associated with a package and kill them:
 
 ## Misc.
 
-Fixes echo for POSIX compatibility
+#### Fixes echo for POSIX compatibility
 
     echo() (
         fmt=%s
@@ -226,3 +219,8 @@ Fixes echo for POSIX compatibility
         done
         printf "$fmt$end" "$*"
     )
+
+
+#### Change the input field separator from a space to a null
+
+    IFS=$'\n'
